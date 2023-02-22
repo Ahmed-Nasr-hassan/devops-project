@@ -19,11 +19,16 @@ spec:
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: ahmednasrhassan/jenkins-docker-kubectl:v1.0
           volumeMounts:
             - name: jenkins-claim
               mountPath: /var/jenkins_home
+            - name: docker-socket
+              mountPath: /var/run/       
       volumes:
         - name: jenkins-claim
           persistentVolumeClaim:
               claimName: jenkins-pv-claim
+        - name: docker-socket
+          hostPath:
+            path: /var/run/
