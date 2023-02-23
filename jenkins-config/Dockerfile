@@ -1,3 +1,4 @@
+# Customize jenkins image that contain docker cli and kubectl
 FROM jenkins/jenkins:lts
 
 USER root
