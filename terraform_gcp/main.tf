@@ -3,9 +3,8 @@ module "iam-section" {
   project_name = "ahmed-nasr-iti-demo"
   service_accounts = {
       # service_account_name = required_role
-      "sa-private-vm" = "roles/container.admin",
+      "sa-management-vm" = "roles/container.admin",
       "sa-private-gke" = "roles/storage.objectViewer"
-      # "sa-private-gke" = "roles/editor"
   }
 }
 
@@ -25,25 +24,29 @@ module "vpc-network" {
   nat_gateway_name = "nat-gateway"
   nat_ip_allocation = "AUTO_ONLY"
   nat_subnet_ip_range = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-  firewall_rule_name = "allow-incoming-ssh-from-iap"
+  firewall_rule_name = "allow-incoming-ssh"
   firewall_traffic_direction = "INGRESS"
-  service_account_email_list = [module.iam-section.private-vm-sa-email]
-  firewall_source_ranges_list = ["35.235.240.0/20"]
+  service_account_email_list = [module.iam-section.management-vm-sa-email]
+  firewall_source_ranges_list = ["0.0.0.0/0"]
   firewall_protocol = "tcp"
   firewall_target_port_list = ["22"]
 }
 
-module "private-vm" {
+module "management-vm" {
   source = "./compute-engine"
-  name = "my-private-vm"
+  name = "management-vm"
   vm_type = "f1-micro"
   vm_zone = "us-central1-a"
   vm_image = "ubuntu-os-cloud/ubuntu-2004-lts"
   vm_subnet_self_link = module.vpc-network.management_subnet_self_link
-  vm_service_account = module.iam-section.private-vm-sa-email
+  vm_service_account = module.iam-section.management-vm-sa-email
   vm_scopes = [ 
      "https://www.googleapis.com/auth/cloud-platform"
   ]
+  depends_on = [
+    module.gke-cluster
+  ]
+
 }
 
 module "gke-cluster" {

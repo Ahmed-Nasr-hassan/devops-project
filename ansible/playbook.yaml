@@ -1,0 +1,53 @@
+- name: SSH into instance using gcloud
+  hosts: management-vm
+  become: true
+  vars:
+    k8s_yaml_files:
+      - ../jenkins-config/devops-tools-namespace.yaml
+      - ../jenkins-config/install-docker-alpine.yaml
+      - ../jenkins-config/serviceAccount.yaml
+      - ../jenkins-config/volume.yaml
+      - ../jenkins-config/jenkins-deployment.yaml
+      - ../jenkins-config/loadbalancer-service.yaml
+
+  tasks:
+    - name: Create google-cloud-sdk.list file in sources.list.d
+      file:
+        path: /etc/apt/sources.list.d/google-cloud-sdk.list
+        state: touch
+
+    - name: Add Google Cloud SDK repository to sources.list.d
+      lineinfile:
+        path: /etc/apt/sources.list.d/google-cloud-sdk.list
+        line: 'deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main'
+        create: yes
+
+    - name: Copy shell script to remote VM
+      copy:
+        src: ./vm-config.sh
+        dest: /tmp/script.sh
+        mode: '0755'
+    
+    - name: Run shell script on remote VM
+      command: /tmp/script.sh
+    
+    - name: Run gcloud command
+      command: gcloud container clusters get-credentials private-gke-cluster --zone us-central1-a --project ahmed-nasr-iti-demo
+
+    - name: Copy k8s YAML files to remote host
+      copy:
+        src: "{{ item }}"
+        dest: /tmp/
+      with_items: "{{ k8s_yaml_files }}"
+
+    - name: Apply k8s YAML files
+      shell: kubectl apply -f /tmp/{{ item }}
+      with_items: 
+        - devops-tools-namespace.yaml
+        - install-docker-alpine.yaml
+        - serviceAccount.yaml
+        - volume.yaml
+        - jenkins-deployment.yaml
+        - loadbalancer-service.yaml
+ 
+
