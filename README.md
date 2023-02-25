@@ -58,4 +58,38 @@
         - ingress-loadbalancer-ip/jenkins -> jenkins dashboard
 
 
+### CI/CD configuration screenshots
 
+1. generate token (secret text) to use it in jenkins to configure GitHub
+
+    ![Alt text](./photos/generate-token-secret-text-to-use-it-in-jenkins.png?raw=true "Title")
+
+    ---
+
+2. config GitHub plugin in jenkins
+
+    ![Alt text](./photos/config_github_plugin_in_jenkins.png?raw=true "Title")
+
+    ---
+
+3. create webhook in GitHub to trigger jenkins
+
+    ![Alt text](./photos/create-webhook-in-github-to-notigy-jenkins.png?raw=true "Title")
+
+    ---
+
+4. adding dockerhub credintials to be used by Jenkinsfile
+
+    ![Alt text](./photos/adding-dockerhub-credintials-to-be-used-in-jenkinsfile.png?raw=true "Title")
+
+    ---
+
+5. jenkins pipeline config (1)
+
+    ![Alt text](./photos/jenkins-pipeline-config-1.png?raw=true "Title")
+
+    ---
+
+6. jenkins pipeline config (2)
+
+    ![Alt text](./photos/jenkins-pipeline-config-2.png?raw=true "Title")
