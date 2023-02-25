@@ -44,12 +44,7 @@
 
 3. project can be extend to include
 
-    1. logging and monitoring solutions using Prometheus and Grafana using the following helm chart
-
-        ``` bash
-            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-            helm install prometheus-release prometheus-community/prometheus
-        ```
+    1. logging and monitoring solutions using Prometheus and Grafana using helm chart
 
     2. use ingress and route to different services based on pathes
 
@@ -57,6 +52,51 @@
         - ingress-loadbalancer-ip/grafana -> grafana dashboard
         - ingress-loadbalancer-ip/jenkins -> jenkins dashboard
 
+
+    ``` yaml
+        # installing prometheus and grafana
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm install prometheus-release prometheus-community/prometheus
+
+        # installing ingress conrtoller
+        helm repo add nginx-stable https://helm.nginx.com/stable
+        helm repo update
+        helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true
+        
+        # ingress yaml file
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+        name: my-ingress
+        annotations:
+        spec:
+        ingressClassName: nginx
+        rules:
+        - host: domain-name
+            http:
+            paths:
+            - pathType: Prefix
+                path: "/pyton-app"
+                backend:
+                service:
+                    name: pyton-app-service
+                    port:
+                    number: 8000
+            - pathType: Prefix
+                path: "/grafana"
+                backend:
+                service:
+                    name: grafana-service
+                    port:
+                    number: 3000
+            - pathType: Prefix
+                path: "/jenkins"
+                backend:
+                service:
+                    name: jenkins-service
+                    port:
+                    number: 8080
+    ```
 
 ### CI/CD configuration screenshots
 
