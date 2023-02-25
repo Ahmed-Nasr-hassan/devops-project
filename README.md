@@ -38,7 +38,7 @@
 
     - create in GitHub repo Jenkinsfile to be used by jenkins pipeline and a Dockerfile that will be also used by jenkins in CI (continous integration)
 
-    - during building the image current date is captured and used in versioning process
+    - during building the image current date is captured and used in versioning process <https://hub.docker.com/repository/docker/ahmednasrhassan/python-app/general>
 
     - finally jenkins CD part will use kubectl to deploy the updated version of the app
 
