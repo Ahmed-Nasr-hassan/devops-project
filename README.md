@@ -2,7 +2,7 @@
 
 ## project description
 
-![Alt text](./photos/DevOps-Project.jpg?raw=true "Title")
+![Alt text](./photos/DevOps-Final-Project.jpg?raw=true "Title")
 
 ---
 
