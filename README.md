@@ -42,10 +42,20 @@
 
     - finally jenkins CD part will use kubectl to deploy the updated version of the app
 
+3. project can be extend to include
 
+    1. logging and monitoring solutions using Prometheus and Grafana using the following helm chart
 
+        ``` bash
+            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+            helm install prometheus-release prometheus-community/prometheus
+        ```
 
+    2. use ingress and route to different services based on pathes
 
+        - ingress-loadbalancer-ip/pyton-app -> App website
+        - ingress-loadbalancer-ip/grafana -> grafana dashboard
+        - ingress-loadbalancer-ip/jenkins -> jenkins dashboard
 
 
 
